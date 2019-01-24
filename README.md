@@ -4,4 +4,5 @@ Whether you like studying in the same cafe in the same table every time, or want
 
 
 Backend go
-Frontend react
+
+Frontend react native
