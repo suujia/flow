@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -25,10 +26,8 @@ func GetSpots(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query
 	category := query()["term"]
 	loc := query()["location"]
-	// url := "https://api.yelp.com/v3/businesses/search?limit=10&sort_by=rating&term=coffee&location=vancouver"
 	url := "https://api.yelp.com/v3/businesses/search?limit=3&open_now=true&sort_by=rating&term=" + category[0] + "&location=" + loc[0]
-	bearer := "Bearer JedlKdM0T8RoPKWK5BW2O1-mLE4vUe6JNH2S-78CrlmEMErDdd2DXRuFfBWe4sl3eg-ckkt3aNhdwWh0-OUheboqbFbH2NvjsILnbavJwTSQ59B4Ef6FtrSUjrJHW3Yx"
-	// os.Getenv("YELP_API")
+	bearer := "Bearer " + os.Getenv("YELP_API")
 
 	// New Client
 	client := &http.Client{}
