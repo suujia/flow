@@ -1,0 +1,146 @@
+# Application setup
+swagger: "2.0"
+info:
+  title: A find great study spots application
+  version: 1.0.0
+  description: The best application
+schemes:
+- http
+- https
+definitions: 
+# Model
+  spots:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      name:
+        type: string
+        minLength: 1
+      location:
+        type: string
+        minLength: 1
+      tags:
+        type: string
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
+# Endpoint
+paths:
+  /:
+    get:
+      tags:
+        - spots
+      parameters:
+        - name: since
+          in: query
+          type: integer
+          format: int64
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        200:
+          description: list the spot operations
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/spots"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      tags:
+        - spots
+      operationId: add_spot
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/spots"
+      responses:
+        201:
+          description: Created spot
+          schema:
+              $ref: "#/definitions/spots"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/error"
+  /{id}:
+    parameters:
+      - type: integer
+        format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      tags:
+        - spots
+      operationId: find_spot
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/spots"
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          default: 1
+      responses:
+        200:
+          description: list the spot if found 
+          schema:
+              $ref: "#/definitions/spots"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      tags:
+        - spots
+      operationId: delete_spot
+      parameters:
+        - type: integer
+          format: int64
+          name: id
+          in: path
+          required: true
+      responses:
+        204:
+          description: Deleted spot
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      tags:
+        - spots
+      operationId: update_spot
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/spots"
+      responses:
+        200:
+          description: Updated spot
+          schema:
+              $ref: "#/definitions/spots"
+        default:
+          description: error response
+          schema:
+            $ref: "#/definitions/error"
