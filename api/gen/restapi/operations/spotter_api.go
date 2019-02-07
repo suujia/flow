@@ -19,7 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/suujia/flow/api/generatedapi/restapi/operations/spots"
+	"github.com/suujia/flow/api/gen/restapi/operations/spots"
 )
 
 // NewSpotterAPI creates a new Spotter instance
@@ -41,6 +41,18 @@ func NewSpotterAPI(spec *loads.Document) *SpotterAPI {
 		JSONProducer:        runtime.JSONProducer(),
 		SpotsGetHandler: spots.GetHandlerFunc(func(params spots.GetParams) middleware.Responder {
 			return middleware.NotImplemented("operation SpotsGet has not yet been implemented")
+		}),
+		SpotsAddSpotHandler: spots.AddSpotHandlerFunc(func(params spots.AddSpotParams) middleware.Responder {
+			return middleware.NotImplemented("operation SpotsAddSpot has not yet been implemented")
+		}),
+		SpotsDeleteSpotHandler: spots.DeleteSpotHandlerFunc(func(params spots.DeleteSpotParams) middleware.Responder {
+			return middleware.NotImplemented("operation SpotsDeleteSpot has not yet been implemented")
+		}),
+		SpotsFindSpotHandler: spots.FindSpotHandlerFunc(func(params spots.FindSpotParams) middleware.Responder {
+			return middleware.NotImplemented("operation SpotsFindSpot has not yet been implemented")
+		}),
+		SpotsUpdateSpotHandler: spots.UpdateSpotHandlerFunc(func(params spots.UpdateSpotParams) middleware.Responder {
+			return middleware.NotImplemented("operation SpotsUpdateSpot has not yet been implemented")
 		}),
 	}
 }
@@ -75,6 +87,14 @@ type SpotterAPI struct {
 
 	// SpotsGetHandler sets the operation handler for the get operation
 	SpotsGetHandler spots.GetHandler
+	// SpotsAddSpotHandler sets the operation handler for the add spot operation
+	SpotsAddSpotHandler spots.AddSpotHandler
+	// SpotsDeleteSpotHandler sets the operation handler for the delete spot operation
+	SpotsDeleteSpotHandler spots.DeleteSpotHandler
+	// SpotsFindSpotHandler sets the operation handler for the find spot operation
+	SpotsFindSpotHandler spots.FindSpotHandler
+	// SpotsUpdateSpotHandler sets the operation handler for the update spot operation
+	SpotsUpdateSpotHandler spots.UpdateSpotHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -140,6 +160,22 @@ func (o *SpotterAPI) Validate() error {
 
 	if o.SpotsGetHandler == nil {
 		unregistered = append(unregistered, "spots.GetHandler")
+	}
+
+	if o.SpotsAddSpotHandler == nil {
+		unregistered = append(unregistered, "spots.AddSpotHandler")
+	}
+
+	if o.SpotsDeleteSpotHandler == nil {
+		unregistered = append(unregistered, "spots.DeleteSpotHandler")
+	}
+
+	if o.SpotsFindSpotHandler == nil {
+		unregistered = append(unregistered, "spots.FindSpotHandler")
+	}
+
+	if o.SpotsUpdateSpotHandler == nil {
+		unregistered = append(unregistered, "spots.UpdateSpotHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -244,6 +280,26 @@ func (o *SpotterAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"][""] = spots.NewGet(o.context, o.SpotsGetHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"][""] = spots.NewAddSpot(o.context, o.SpotsAddSpotHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/{id}"] = spots.NewDeleteSpot(o.context, o.SpotsDeleteSpotHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/{id}"] = spots.NewFindSpot(o.context, o.SpotsFindSpotHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/{id}"] = spots.NewUpdateSpot(o.context, o.SpotsUpdateSpotHandler)
 
 }
 
