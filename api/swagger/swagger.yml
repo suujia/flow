@@ -1,46 +1,60 @@
 # Application setup
-consumes:
-- application/io.goswagger.examples.todo-list.v1+json
-definitions: {}
+swagger: "2.0"
 info:
   title: A find great study spots application
-  description: The best application
   version: 1.0.0
-paths: {}
-produces:
-- application/io.goswagger.examples.todo-list.v1+json
-schemes:
-- http
-- https
-swagger: "2.0"
----
-# Model 
-definitions:
-  item:
+  description: The best application
+definitions: 
+# Model
+  spots:
     type: object
-    required:
-      - description
     properties:
       id:
         type: integer
         format: int64
         readOnly: true
-      description:
+      name:
         type: string
         minLength: 1
-      completed:
-        type: boolean
----
+      location:
+        type: string
+        minLength: 1
+      tags:
+        type: string
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
 # Endpoint
 paths:
   /:
     get:
       tags:
-        - spot
+        - spots
+      parameters:
+        - name: since
+          in: query
+          type: integer
+          format: int64
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          default: 20
       responses:
         200:
-          description: list the todo operations
+          description: list the spot operations
           schema:
             type: array
             items:
-              $ref: "#/definitions/item"
+              $ref: "#/definitions/spots"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
